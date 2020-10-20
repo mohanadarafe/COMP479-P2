@@ -1,1 +1,4 @@
-Data
+data
+__pycache__
+output
+.DS_Store

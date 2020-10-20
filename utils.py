@@ -1,5 +1,18 @@
 import nltk
 
+def get_tokens(document):
+    tokensList = []
+    for tokens in getDocumentTitle(document):
+        tokensList.append(tokens)
+
+    for tokens in getDocumentBody(document):
+        tokensList.append(tokens)
+
+    for tokens in getDocumentExtraTokens(document):
+        tokensList.append(tokens)
+
+    return tokensList
+
 def sanitizer(document, starterDelimiter, endDelimiter, index):
     tokenizer = nltk.RegexpTokenizer(r'\w+')
     start = document.find(starterDelimiter) + index
@@ -14,13 +27,18 @@ def getDocumentBody(document):
 def getDocumentTitle(document):
     start, end, tokenizer = sanitizer(document, "<TITLE>", "</TITLE>", 7)
     tokens = tokenizer.tokenize(document[start:end])
-    return document[start:end]
+    return tokens
+
+def getDocumentDate(document):
+    start, end, tokenizer = sanitizer(document, "<DATELINE>", "</DATELINE>", 10)
+    tokens = tokenizer.tokenize(document[start:end])
+    return tokens
 
 ## This gets all tokens in <D> tags which includes people, categories & places.
 def getDocumentExtraTokens(document):
     start, end, tokenizer = sanitizer(document, "<D>", "</D>", 3)
     tokens = tokenizer.tokenize(document[start:end])
-    return document[start:end]
+    return tokens
 
 def getDocumentId(document):
     start = document.find('NEWID="') + 7

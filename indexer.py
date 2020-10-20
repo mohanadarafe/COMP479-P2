@@ -14,16 +14,10 @@ def block_tokenizer(INPUT_STRUCTURE):
     for dictionary in INPUT_STRUCTURE:
         id = dictionary["ID"]
         text = dictionary["TEXT"]
-        for words in utils.getDocumentBody(text):
+        for words in utils.get_tokens(text):
             wordTuple = (id, words)
             tupleList.append(wordTuple)
-        for words in utils.getDocumentTitle(text).split():
-            wordTuple = (id, words)
-            tupleList.append(wordTuple)
-        for words in utils.getDocumentExtraTokens(text).split():
-            wordTuple = (id, words)
-            tupleList.append(wordTuple)
-
+            
     return tupleList
 
 def block_extractor(INPUT_STRUCTURE):

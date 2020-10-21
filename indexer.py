@@ -47,7 +47,7 @@ def block_document_segmenter(raw_files):
             if START_DELIMITER in lines: 
                 keepCopying = True
             if keepCopying:
-                document += lines
+                document += " " + lines
 
     return document_list
 

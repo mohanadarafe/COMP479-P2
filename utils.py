@@ -1,5 +1,18 @@
 import nltk
 
+def addtolist(dic, key, val):
+    if(key in dic):
+        dic[key][0] += 1
+        dic[key][1].append(val)
+    else:
+        dic[key] = [1, [val]]
+
+def queryProcessor(word, dic):
+    if word in dic:
+        print(dic[word])
+    else:
+        print("negatif")
+
 def get_tokens(document):
     tokensList = []
     for tokens in getDocumentTitle(document):

@@ -1,6 +1,6 @@
 import nltk
 
-def addtolist(dic, key, val):
+def construct_postings(dic, key, val):
     if(key in dic):
         dic[key][0] += 1
         dic[key][1].append(val)

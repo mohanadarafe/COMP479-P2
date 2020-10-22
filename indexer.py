@@ -1,17 +1,64 @@
-import glob, os, sys, utils, nltk
+import glob, os, sys, utils, nltk, json
+from tqdm import tqdm
 
-def get_documents(path):
+def module1(path):
+    print("\nGeting raw files...")
     raw_files = block_reader(path)
+    print("\nParsing documents...")
     documents = block_document_segmenter(raw_files)
+    print("\nBuilding id-raw document pairs...")
     doc_pairs = block_extractor(documents)
-    tokenize_doc = block_tokenizer(doc_pairs)
-    return tokenize_doc
+    print("\nTokenizing id-document pairs...")
+    F = block_tokenizer(doc_pairs)
+    print("\nCreating output file...")
+    return F
 
-def block_tokenizer(INPUT_STRUCTURE):
+def module2(INPUT):
+    dictionary = dict()
+
+    for pairs in INPUT:
+        docID = int(pairs[0])
+        term = pairs[1]
+
+        if term not in dictionary:
+            dictionary[term] = [1, set([docID])]
+        elif term in dictionary:
+            dictionary[term][1].add(docID)
+            dictionary[term][0] = len(dictionary[term][1])
+
+    for term in dictionary:
+        dictionary[term][1] = sorted(list(dictionary[term][1]))
+
+    list_dict = list(dictionary.items())
+    sorted_list = sorted(list_dict, key=lambda x: x[0])
+    tupleList = []
+    for sorted_pairs in sorted_list:
+        for docIDs in sorted_pairs[1][1]:
+            tupleList.append((docIDs, sorted_pairs[0]))
+
+    with open("output/sorted_list.json", "w") as f:
+        for tuples in tupleList:
+            f.write(json.dumps(tuples))
+            f.write("\n")
+        
+    return dictionary
+
+'''
+    dictionary.items() -> (term, [freq, [postings list]]).sort(key=lambda x, x[0])
+'''
+def module3(INPUT):
+    dictionary = dict()
+    for pairs in INPUT:
+        utils.construct_postings(dictionary, pairs[1], int(pairs[0]))
+
+    print(dictionary)
+    return dictionary
+
+def block_tokenizer(document_dict):
     tupleList = []
     wordTuple = ()
 
-    for dictionary in INPUT_STRUCTURE:
+    for dictionary in tqdm(document_dict):
         id = dictionary["ID"]
         text = dictionary["TEXT"]
         for words in utils.get_tokens(text):
@@ -20,11 +67,11 @@ def block_tokenizer(INPUT_STRUCTURE):
             
     return tupleList
 
-def block_extractor(INPUT_STRUCTURE):
+def block_extractor(documents):
     newsList = []
     newsDictionary = {}
 
-    for document in INPUT_STRUCTURE:
+    for document in tqdm(documents):
         newsDictionary = {'ID': utils.getDocumentId(document), 'TEXT': document}
         newsList.append(newsDictionary)
         
@@ -38,7 +85,7 @@ def block_document_segmenter(raw_files):
     END_DELIMITER = '</REUTERS>'
     
     for files in raw_files:
-        for lines in files.splitlines():
+        for lines in tqdm(files.splitlines()):
             if END_DELIMITER in lines: 
                 document += lines
                 document_list.append(document)
@@ -60,7 +107,7 @@ def block_reader(path):
         
         files.sort()
 
-        for fileName in files:
+        for fileName in tqdm(files):
             raw = open(fileName, 'r', errors='ignore').read()
             fileContent.append(raw)
 

@@ -1,17 +1,5 @@
-import nltk
-
-def construct_postings(dic, key, val):
-    if(key in dic):
-        dic[key][0] += 1
-        dic[key][1].append(val)
-    else:
-        dic[key] = [1, [val]]
-
-def queryProcessor(word, dic):
-    if word in dic:
-        print(dic[word])
-    else:
-        print("negatif")
+import nltk, glob
+from tqdm import tqdm
 
 def get_tokens(document):
     tokensList = []
@@ -57,3 +45,67 @@ def getDocumentId(document):
     start = document.find('NEWID="') + 7
     end = document.find(">", start) - 1
     return document[start:end]
+
+def block_tokenizer(document_dict):
+    tupleList = []
+    wordTuple = ()
+
+    for dictionary in tqdm(document_dict):
+        id = dictionary["ID"]
+        text = dictionary["TEXT"]
+        for words in get_tokens(text):
+            wordTuple = (id, words)
+            tupleList.append(wordTuple)
+            
+    return tupleList
+
+def block_extractor(documents):
+    newsList = []
+    newsDictionary = {}
+
+    for document in tqdm(documents):
+        newsDictionary = {'ID': getDocumentId(document), 'TEXT': document}
+        newsList.append(newsDictionary)
+        
+    return newsList
+
+def block_document_segmenter(raw_files):
+    document_list = []
+    document = ""
+    keepCopying = False
+    START_DELIMITER = '<REUTERS '
+    END_DELIMITER = '</REUTERS>'
+    
+    for files in raw_files:
+        for lines in tqdm(files.splitlines()):
+            if END_DELIMITER in lines: 
+                document += lines
+                document_list.append(document)
+                document = ""
+                keepCopying = False
+            if START_DELIMITER in lines: 
+                keepCopying = True
+            if keepCopying:
+                document += " " + lines
+
+    return document_list
+
+def block_reader(path):
+    fileContent = []
+    try:
+        files = []
+        for file in glob.glob(path+"/*.sgm"):
+            files.append(file)
+        
+        files.sort()
+
+        for fileName in tqdm(files):
+            raw = open(fileName, 'r', errors='ignore').read()
+            fileContent.append(raw)
+
+        assert len(fileContent) == 22, "There may be a missing file!"
+        
+    except FileNotFoundError:
+        print("File not found!")
+    
+    return fileContent

@@ -1,4 +1,5 @@
 import nltk, glob
+from nltk import word_tokenize
 from tqdm import tqdm
 
 def get_tokens(document):
@@ -21,7 +22,7 @@ def sanitizer(document, starterDelimiter, endDelimiter, index):
     return start, end, tokenizer
 
 def getDocumentBody(document):
-    start, end, tokenizer = sanitizer(document, "<BODY>", " Reuter&#3;</BODY>", 6)
+    start, end, tokenizer = sanitizer(document, "<BODY>", "Reuter &#3;</BODY></TEXT></REUTERS", 6)
     tokens = tokenizer.tokenize(document[start:end])
     return tokens
 

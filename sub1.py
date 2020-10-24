@@ -16,7 +16,7 @@ def preprocess_reuters(path):
 def build_postings_list(INPUT):
     dictionary = dict()
     print("Removing duplicates...")
-    for pairs in tqdm(INPUT, total=3569925):
+    for pairs in tqdm(INPUT, total=3498975):
         docID = int(pairs[0])
         term = pairs[1]
 

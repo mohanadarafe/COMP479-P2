@@ -8,7 +8,7 @@ The following block executes the first block Naive Indexer. In order to run the 
     <path_to_data>: path to reuters data files
     <output_file_name>: name your file to see output
 '''
-import asserts, sub1_modules, nltk, time
+import asserts, sub1, nltk, time
 from tqdm import tqdm
 
 # Read command line arguments
@@ -28,7 +28,7 @@ Given the path of the reuter files, the following block will
 output the docID-term pairs inside a file of your choice.
 '''
 start = time.time()
-for reuters_file_content in tqdm(sub1_modules.preprocess_reuters(path)):
+for reuters_file_content in tqdm(sub1.preprocess_reuters(path)):
     asserts.output(reuters_file_content)
 end = time.time()
 print(f'\nDone! Your file was created in {"{:.3f}".format(end-start)} seconds')

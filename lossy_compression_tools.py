@@ -2,6 +2,12 @@ import math, json
 from nltk.stem import PorterStemmer 
 from tqdm import tqdm
 
+def frequency(dictionary):
+    val = 0
+    for keys in dictionary.keys():
+        val += dictionary[keys][0]
+    return val
+
 def stemming(dictionary):
     ps = PorterStemmer()
     stemming_dict = dict()

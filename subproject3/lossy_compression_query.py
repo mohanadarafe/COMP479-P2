@@ -18,10 +18,10 @@ assert len(query) == 1, "Enter only one query term!"
 query_term = query[0].replace(" ", "")
 PATH = "output/postings_list.json"
 
+start = time.time()
 dictionary = lossy_compression_helper.getCompressedDictionary(PATH)
 assert type(dictionary) == dict, "Something went wrong with the postings list, make sure you ran module 1 first!"
 
-start = time.time()
 with open("output/compressedSampleQueries.json", 'a', encoding="utf-8") as outputFile:
     if query_term not in dictionary:
         print("The query term you input is not in the corpus!")

@@ -2,7 +2,7 @@
 The following block executes outputs lossy's compression table.
 
     LOSSY TABLE EXECUTION
-    python subproject3/loosy_compressor_execute.py
+    python subproject3/loosy_compression_run.py
 
 '''
 import lossy_compression_helper, time, sys

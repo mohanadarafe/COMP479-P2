@@ -1,6 +1,5 @@
 import math, json, lossy_compression_tools
 from nltk.stem import PorterStemmer 
-from tqdm import tqdm
 
 def computeTermLossy(path):
     dictionary = dict()
@@ -54,6 +53,21 @@ def computeNPLossy(path):
 
     return stats
 
+def getCompressedDictionary(path):
+    dictionary = dict()
+    stats = dict()
+
+    with open(path, 'r') as json_file: 
+        dictionary = json.load(json_file)
+
+    dictionary = lossy_compression_tools.remove_numbers(dictionary)
+    dictionary = lossy_compression_tools.case_folding(dictionary)
+    dictionary = lossy_compression_tools.remove_stopwords(dictionary, 30)
+    dictionary = lossy_compression_tools.remove_stopwords(dictionary, 150)
+    dictionary = lossy_compression_tools.stemming(dictionary)
+
+    return dictionary
+
 def displayTable(path):
     term_data = computeTermLossy(path)
     np_data = computeNPLossy(path)
@@ -94,4 +108,4 @@ def displayTable(path):
     deltaValueNP = lossy_compression_tools.delta(np_data["150_stopwords"], np_data["stemming"])
     termValueNP = lossy_compression_tools.delta(np_data["unfiltered"], np_data["stemming"])
     print(f'stemming\t{term_data["stemming"]}\t{deltaValueTerms*-1 if deltaValueTerms > 0 else deltaValueTerms}\t{termValueTerms*-1 if termValueTerms > 0 else termValueTerms}\t{np_data["stemming"]}\t{deltaValueNP*-1}\t{termValueNP*-1}')
-
+    print('\n')

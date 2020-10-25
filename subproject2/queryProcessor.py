@@ -3,7 +3,7 @@ The following block executes the single term query
 
     QUERY PROCESSOR
     python subproject2/queryProcessor.py -q "<query>"
-    python subproject2/queryProcessor.py -q "apple"
+    e.g. python subproject2/queryProcessor.py -q "apple"
     
     <query>: token to query
 '''

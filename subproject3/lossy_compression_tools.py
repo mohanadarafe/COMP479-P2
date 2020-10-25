@@ -1,6 +1,7 @@
 import math, json
 from nltk.stem import PorterStemmer 
 from tqdm import tqdm
+from os import path
 
 def frequency(dictionary):
     val = 0
@@ -22,7 +23,8 @@ def stemming(dictionary):
 
 def remove_stopwords(dictionary, num_words):
     stopwords = []
-    with open("stopwords.txt", 'r') as fp:
+    assert path.exists("utilities/stopwords.txt"), "Make sure the utilities package contains the stopwords!"
+    with open("utilities/stopwords.txt", 'r') as fp:
         stopwords = fp.readlines()
 
     stopwords = [words.replace('\n', "") for words in stopwords]
@@ -40,6 +42,7 @@ def remove_stopwords(dictionary, num_words):
 
 def case_folding(dictionary):
     case_folding_dict = dict()
+    print("\n")
     for keys in tqdm(dictionary.keys()):
         if keys.lower() not in case_folding_dict:
             case_folding_dict[keys.lower()] = dictionary[keys]

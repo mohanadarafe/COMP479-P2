@@ -60,7 +60,7 @@ e.g. python subproject2/queryProcessor.py -q "apple"
 The lossy table compressor is displayed in the console.
 
 ```
-python subproject3/loosy_compressor_execute.py
+python subproject3/loosy_compression_run.py
 ```
 
 **Lossy Table Compressor Query**

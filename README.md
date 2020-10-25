@@ -56,13 +56,15 @@ e.g. python subproject2/queryProcessor.py -q "apple"
 ### Sub-project 3
 
 **Lossy Table Compressor**
+
 The lossy table compressor is displayed in the console.
 
 ```
-python subproject3/loosy_compressor_execute.py
+python subproject3/loosy_compression_run.py
 ```
 
 **Lossy Table Compressor Query**
+
 Check the output folder to see the results in ```compressedSampleQueries.json```
 NOTE: It is normal that many query terms don't appear to have results, this is due to the Porter Stemmer.
 
